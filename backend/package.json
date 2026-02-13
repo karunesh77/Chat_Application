@@ -12,9 +12,15 @@
   "license": "ISC",
   "packageManager": "pnpm@10.28.0",
   "dependencies": {
+    "cloudinary": "^2.9.0",
+    "colores": "^1.0.1",
+    "colors": "^1.4.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.4",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.1.6",
+    "multer": "^2.0.2",
     "nodemon": "^3.1.11",
     "socket.io": "^4.8.3",
     "socketio": "^1.0.0"

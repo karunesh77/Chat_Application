@@ -1,5 +1,5 @@
 
-import Chat from "../models/chatModels";
+import Chat from "../models/chatModels.js";
 
 
 
@@ -12,7 +12,7 @@ import Chat from "../models/chatModels";
  * @returns {Promise<void>} resolves when the chat is accessed
  */
 const accessChat = async (req, res) => {
-    const userId = req.params.id;
+    const { userId } = req.body;
 
     if (!userId) {
         console.log("UserId param not sent with request");

@@ -1,5 +1,5 @@
 
-import User from "../models/userModel.js";
+import User from "../models/userModels.js";
 import Message from "../models/messageModel.js";
 
 
@@ -48,6 +48,6 @@ const allMessages = async (req, res) => {
 }
 
 
-export {sendMessage};
+export {sendMessage ,allMessages};
 
 

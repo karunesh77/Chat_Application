@@ -7,3 +7,5 @@ const router = Router();
 router.get("/",protect,sendMessage);
 
 router.get("/:chatId",protect,allMessages);
+
+export { router as messageRoutes };
