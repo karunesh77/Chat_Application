@@ -1,5 +1,6 @@
 
 import Chat from "../models/chatModels.js";
+import User from "../models/userModels.js";
 
 
 
@@ -13,6 +14,7 @@ import Chat from "../models/chatModels.js";
  */
 const accessChat = async (req, res) => {
     const { userId } = req.body;
+    console.log("this is userId from accessChat controller ", userId);
 
     if (!userId) {
         console.log("UserId param not sent with request");
@@ -26,8 +28,8 @@ const accessChat = async (req, res) => {
     var isChat = await Chat.find({
         isGroupChat: false,
         $and: [
-            { users: { $elemMatch: { $eq: req.user._id } } },
-            { users: { $elemMatch: { $eq: userId } } },
+           { users: { $elemMatch: { $eq: req.user._id } } },
+           { users: { $elemMatch: { $eq: userId } } },
         ],
     })
         .populate("users", "-password")
@@ -62,8 +64,7 @@ const accessChat = async (req, res) => {
             );
             res.status(200).send(FullChat);
         } catch (error) {
-            res.status(400);
-            throw new Error(error.message);
+            res.status(400).send(error.message);
         }
     }
 };
@@ -108,29 +109,37 @@ const fetchChats = async (req, res) => {
  * @param {res} express response object
  * @returns {Promise<void>} resolves when the group chat is created
  */
-const createGroupChat = async (req, res) => {
-    try {
-        // create a new group chat
-        const newChat = await Chat.create({
-            // name of the group chat
-            chatName: req.body.name,
-            // users in the group chat
-            users: JSON.parse(req.body.users),
-            // boolean indicating whether the chat is a group chat
-            isGroupChat: true,
-            // the user who created the group chat
-            groupAdmin: req.user,
-        });
+// const createGroupChat = async (req, res) => {
 
-        // send the newly created group chat as a response
-        res.status(201).json(newChat);
-    } catch (err) {
-        // send an error message if the group chat creation fails
-        res.status(400).json({ message: err.message });
-    }
-};
+//     if(!req.body.users || !req.body.name) {
+//         return res.status(400).json({ message: "Please fill all the fields" });
+//     }
+//     if(JSON.parse(req.body.users).length < 2) {
+//         return res.status(400).json({ message: "More than 2 users are required to form a group chat" });
+//     }
+    
+//     try {
+//         // create a new group chat
+//         const newChat = await Chat.create({
+//             // name of the group chat
+//             chatName: req.body.name,
+//             // users in the group chat
+//             users: JSON.parse(req.body.users),
+//             // boolean indicating whether the chat is a group chat
+//             isGroupChat: true,
+//             // the user who created the group chat
+//             groupAdmin: req.user,
+//         });
+
+//         // send the newly created group chat as a response
+//         res.status(201).json(newChat);
+//     } catch (err) {
+//         // send an error message if the group chat creation fails
+//         res.status(400).json({ message: err.message });
+//     }
+// };
 
 
 
 
-export { accessChat, fetchChats, createGroupChat };
+export { accessChat, fetchChats };

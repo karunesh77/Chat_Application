@@ -32,9 +32,9 @@ const registerUser = async (req, res) => {
 
     // generate token
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-    // send token as a cookie
+    // send token as a cookie and store to the browser
     res.cookie("token", token, {
-      expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+      expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000), // 90 days expiration
       httpOnly: true,
     });
 
@@ -60,13 +60,23 @@ const loginUser = async (req, res) => {
       return res.status(400).json({ message: "User not found" });
     }
 
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+
+    // SET COOKIE HERE
+    res.cookie("token", token, {
+      expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+      httpOnly: true,
+    });
+
     res.status(200).json({
       message: "User logged in successfully",
       _id: user._id,
       name: user.name,
       email: user.email,
       pic: user.pic,
+      token,
     });
+
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -82,7 +92,10 @@ const allUser = async (req, res) => {
           ],
         }
       : {};
-    const users = await User.find(keyword)
+    const users = await User.find(keyword).find({ _id: { $ne: req.user._id } }); // exclude the current user from the search results
+    if(users.length === 0){
+      return res.status(404).json({ message: "No users found" });
+    }
     res.send(users);
   } catch (error) {
     res.status(400).json({ message: error.message });

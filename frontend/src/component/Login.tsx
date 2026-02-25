@@ -30,10 +30,11 @@ function LoginForm() {
     });
 
     const data = await res.json();
+    localStorage.setItem("userInfo", JSON.stringify(data));
     console.log(data);
     setLoader(false);
     if (res.ok) {
-      navigate("/chat");
+      navigate("/chats");
     }
   };
 
